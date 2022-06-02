@@ -68,7 +68,7 @@ def r_smg(s_left, s_right, x):
                     time.sleep(0.001)
                     win32api.mouse_event(0x01, -10, 0)  # move right back
                     time.sleep(0.001)
-                    win32api.mouse_event(0x01, 0, 6)  # counter recoil
+                    win32api.mouse_event(0x01, 0, 17)  # counter recoil
                     time.sleep(0.001)
                     win32api.mouse_event(0x01, -10, 0)  # move right
                     time.sleep(0.001)
@@ -83,7 +83,7 @@ def r_smg(s_left, s_right, x):
     if a != s_left:
         while a < 0:
             print('Left Button Pressed')
-            win32api.mouse_event(0x01, 0, 1)  # counter recoil
+            win32api.mouse_event(0x01, 0, 4)  # counter recoil
             time.sleep(0.01)
             a = win32api.GetKeyState(0x01)  # check button state
             print("left click state = {0}".format(a))
