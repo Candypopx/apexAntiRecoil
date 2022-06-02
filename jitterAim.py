@@ -10,14 +10,17 @@ state_right = win32api.GetKeyState(0x02)  # rightButton Up = 0 or 1; Down = -127
 # Set the toggle button
 flat_toggle = 'Y'
 r_smg_toggle = 'U'
+car_smg_toggle = 'I'
 
 # last state for toggle button
 last_state_flat = False
 last_state_r_smg = False
+last_state_car_smg = False
 
 # Set whether the anti-recoil is enabled by default
 enabled_flat = False
 enabled_r_smg = False
+enabled_car_smg = False
 
 
 # module session
@@ -89,6 +92,41 @@ def r_smg(s_left, s_right, x):
             print("left click state = {0}".format(a))
 
 
+# module for CAR SMG anti recoil
+# toggle button = "I"
+def car_smg(s_left, s_right, x):
+    if x != s_right:  # jitter aim while ads
+        while x < 0:
+            a = win32api.GetKeyState(0x01)  # always check the state of right click
+            if a != s_left:
+                while a < 0:
+                    print('Left Button Pressed with Right button')
+                    win32api.mouse_event(0x01, 10, 0)  # move left
+                    time.sleep(0.001)
+                    win32api.mouse_event(0x01, -10, 0)  # move right back
+                    time.sleep(0.001)
+                    win32api.mouse_event(0x01, 0, 20)  # counter recoil
+                    time.sleep(0.001)
+                    win32api.mouse_event(0x01, -10, 0)  # move right
+                    time.sleep(0.001)
+                    win32api.mouse_event(0x01, 10, 0)  # move back left to center
+                    time.sleep(0.001)
+                    a = win32api.GetKeyState(0x01)  # check button state
+                    print("left click state = {0}".format(a))
+            x = win32api.GetKeyState(0x02)  # check right button state
+            print("right click state = {0}".format(x))
+
+    a = win32api.GetKeyState(0x01)
+    if a != s_left:
+        while a < 0:
+            print('Left Button Pressed')
+            win32api.mouse_event(0x01, 0, 5)  # counter recoil
+            time.sleep(0.01)
+            a = win32api.GetKeyState(0x01)  # check button state
+            print("left click state = {0}".format(a))
+
+
+# main part
 # print for startup
 print("Anti-recoil script started!")
 
@@ -98,6 +136,7 @@ while True:
     # check state changed for toggle button
     key_down_flat = keyboard.is_pressed(flat_toggle)
     key_down_r_smg = keyboard.is_pressed(r_smg_toggle)
+    key_down_car_smg = keyboard.is_pressed(car_smg_toggle)
 
     # FLAT LINE running script
     if key_down_flat != last_state_flat:
@@ -109,6 +148,8 @@ while True:
                 # clear state
                 last_state_r_smg = False
                 enabled_r_smg = False
+                last_state_car_smg = False
+                enabled_car_smg = False
             else:
                 print("Anti-recoil flat line OFF")
 
@@ -125,15 +166,32 @@ while True:
                 # clear state
                 last_state_flat = False
                 enabled_flat = False
+                last_state_car_smg = False
+                enabled_car_smg = False
             else:
                 print("Anti-recoil R99 OFF")
 
     if enabled_r_smg:
         r_smg(state_left, state_right, b)
 
+    # CAR SMG running script
+    if key_down_car_smg != last_state_car_smg:
+        last_state_car_smg = key_down_car_smg
+        if last_state_car_smg:
+            enabled_car_smg = not enabled_car_smg
+            if enabled_car_smg:
+                print("Anti-recoil CAR SMG ON")
+                # clear state
+                last_state_flat = False
+                enabled_flat = False
+                last_state_r_smg = False
+                enabled_r_smg = False
+            else:
+                print("Anti-recoil CAR SMG OFF")
 
-# module for CAR SMG anti recoil
-# toggle button = "I"
+    if enabled_car_smg:
+        car_smg(state_left, state_right, b)
+
 
 # module for HAVOC anti recoil
 # toggle button = "O"
