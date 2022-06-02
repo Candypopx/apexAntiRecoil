@@ -4,9 +4,9 @@ import keyboard
 
 # only jitter while ads
 state_left = win32api.GetKeyState(0x01)  # leftButton Up = 0 or 1; Down = -127 or -128
-print("left initial state = {0}".format(state_left))
+# print("left initial state = {0}".format(state_left))
 state_right = win32api.GetKeyState(0x02)  # rightButton Up = 0 or 1; Down = -127 or -128
-print("left initial state = {0}".format(state_right))
+# print("left initial state = {0}".format(state_right))
 # Set the toggle button
 toggle_button = 'num lock'
 last_state = False  # last state for toggle button
@@ -62,3 +62,14 @@ else:
                     time.sleep(0.01)
                     a = win32api.GetKeyState(0x01)  # check button state
                     print("left click state = {0}".format(a))
+
+# module for FLATLINE anti recoil
+def flatline():
+
+# module for R99 anti recoil
+
+# module for CAR SMG anti recoil
+
+# module for HAVOC anti recoil
+
+# module for R301 anti recoil
