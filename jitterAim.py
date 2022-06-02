@@ -12,18 +12,22 @@ flat_toggle = 'Y'
 r_smg_toggle = 'U'
 car_smg_toggle = 'I'
 havoc_toggle = 'O'
+r_one_toggle = 'P'
 
 # last state for toggle button
 last_state_flat = False
 last_state_r_smg = False
 last_state_car_smg = False
 last_state_havoc = False
+last_state_r_one = False
+
 
 # Set whether the anti-recoil is enabled by default
 enabled_flat = False
 enabled_r_smg = False
 enabled_car_smg = False
 enabled_havoc = False
+enabled_r_one = False
 
 
 # module session
@@ -163,6 +167,40 @@ def havoc(s_left, s_right, x):
             print("left click state = {0}".format(a))
 
 
+# module for R301 anti recoil
+# toggle button = "P"
+def r_one(s_left, s_right, x):
+    if x != s_right:  # jitter aim while ads
+        while x < 0:
+            a = win32api.GetKeyState(0x01)  # always check the state of right click
+            if a != s_left:
+                while a < 0:
+                    print('Left Button Pressed with Right button')
+                    win32api.mouse_event(0x01, 10, 0)  # move left
+                    time.sleep(0.001)
+                    win32api.mouse_event(0x01, -10, 0)  # move right back
+                    time.sleep(0.001)
+                    win32api.mouse_event(0x01, 0, 13)  # counter recoil
+                    time.sleep(0.001)
+                    win32api.mouse_event(0x01, -10, 0)  # move right
+                    time.sleep(0.001)
+                    win32api.mouse_event(0x01, 10, 0)  # move back left to center
+                    time.sleep(0.001)
+                    a = win32api.GetKeyState(0x01)  # check button state
+                    print("left click state = {0}".format(a))
+            x = win32api.GetKeyState(0x02)  # check right button state
+            print("right click state = {0}".format(x))
+
+    a = win32api.GetKeyState(0x01)
+    if a != s_left:
+        while a < 0:
+            print('Left Button Pressed')
+            win32api.mouse_event(0x01, 0, 3)  # counter recoil
+            time.sleep(0.01)
+            a = win32api.GetKeyState(0x01)  # check button state
+            print("left click state = {0}".format(a))
+
+
 # main part
 # print for startup
 print("Anti-recoil script started!")
@@ -175,6 +213,7 @@ while True:
     key_down_r_smg = keyboard.is_pressed(r_smg_toggle)
     key_down_car_smg = keyboard.is_pressed(car_smg_toggle)
     key_down_havoc = keyboard.is_pressed(havoc_toggle)
+    key_down_r_one = keyboard.is_pressed(r_one_toggle)
 
     # FLAT LINE running script
     if key_down_flat != last_state_flat:
@@ -190,6 +229,8 @@ while True:
                 enabled_car_smg = False
                 last_state_havoc = False
                 enabled_havoc = False
+                last_state_r_one = False
+                enabled_r_one = False
             else:
                 print("Anti-recoil flat line OFF")
 
@@ -210,6 +251,8 @@ while True:
                 enabled_car_smg = False
                 last_state_havoc = False
                 enabled_havoc = False
+                last_state_r_one = False
+                enabled_r_one = False
             else:
                 print("Anti-recoil R99 OFF")
 
@@ -230,6 +273,8 @@ while True:
                 enabled_r_smg = False
                 last_state_havoc = False
                 enabled_havoc = False
+                last_state_r_one = False
+                enabled_r_one = False
             else:
                 print("Anti-recoil CAR SMG OFF")
 
@@ -250,12 +295,35 @@ while True:
                 enabled_r_smg = False
                 last_state_car_smg = False
                 enabled_car_smg = False
+                last_state_r_one = False
+                enabled_r_one = False
             else:
                 print("Anti-recoil HAVOC OFF")
 
     if enabled_havoc:
         havoc(state_left, state_right, b)
 
+    # R301 running script
+    if key_down_r_one != last_state_r_one:
+        last_state_r_one = key_down_r_one
+        if last_state_r_one:
+            enabled_r_one = not enabled_r_one
+            if enabled_r_one:
+                print("Anti-recoil R301 ON")
+                # clear state
+                last_state_flat = False
+                enabled_flat = False
+                last_state_r_smg = False
+                enabled_r_smg = False
+                last_state_car_smg = False
+                enabled_car_smg = False
+                last_state_havoc = False
+                enabled_havoc = False
+            else:
+                print("Anti-recoil R301 OFF")
 
-# module for R301 anti recoil
-# toggle button = "P"
+    if enabled_r_one:
+        r_one(state_left, state_right, b)
+
+
+
