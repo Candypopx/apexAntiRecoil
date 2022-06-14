@@ -8,11 +8,11 @@ state_left = win32api.GetKeyState(0x01)  # leftButton Up = 0 or 1; Down = -127 o
 state_right = win32api.GetKeyState(0x02)  # rightButton Up = 0 or 1; Down = -127 or -128
 # print("left initial state = {0}".format(state_right))
 # Set the toggle button
-flat_toggle = 'Y'
-r_smg_toggle = 'U'
-car_smg_toggle = 'I'
-havoc_toggle = 'O'
-r_one_toggle = 'P'
+flat_toggle = '6'
+r_smg_toggle = '7'
+car_smg_toggle = '8'
+havoc_toggle = '9'
+r_one_toggle = '0'
 
 # last state for toggle button
 last_state_flat = False
