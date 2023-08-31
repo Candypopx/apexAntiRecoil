@@ -1,2 +1,2 @@
 # apexAntiRecoil
-Experiment on anti gun recoil for Apex legends PC
+Emulate jittering effect to minimize the recoil for most of the weapon in Apex Legends
